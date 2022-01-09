@@ -1,0 +1,9 @@
+.btn-remove-table{
+    border: none;
+    background-color: transparent;
+
+    &:hover{
+        background-color: transparent;
+        cursor: pointer;
+    }
+}
