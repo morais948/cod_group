@@ -1,4 +1,4 @@
-@extends('layouts.app', ['class' => 'bg-default'])
+@extends('layouts.app', ['class' => 'bg-person'])
 
 @section('content')
     @include('layouts.headers.guest')
@@ -45,7 +45,7 @@
                                 </label>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary my-4">{{ __('Entrar') }}</button>
+                                <button type="submit" class="btn my-4" style="background-color: #4174d2; color: white">{{ __('Entrar') }}</button>
                             </div>
                         </form>
                     </div>
