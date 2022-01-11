@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customers;
 use Illuminate\Http\Request;
+use App\Http\Requests\CostumerRequest;
 
 class CustomersController extends Controller
 {
@@ -34,9 +35,14 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CostumerRequest $request)
     {
-        //
+        try {
+            Customers::create($request->except('_token', '_method'));
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Erro! Por favor entre em contato com o suporte');
+        }
+        return redirect()->route('clientes.index')->with('success', 'Registro cadastrado com sucesso');
     }
 
     /**
@@ -56,9 +62,10 @@ class CustomersController extends Controller
      * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customers $customers)
+    public function edit($id)
     {
-        //
+        $customers = Customers::find($id);
+        return view('customers.edit', compact('customers'));
     }
 
     /**
@@ -68,9 +75,15 @@ class CustomersController extends Controller
      * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customers $customers)
+    public function update(CostumerRequest $request, $id)
     {
-        //
+        $customers = Customers::find($id);
+        try {
+            $customers->update($request->except('_token', '_method'));
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Erro! Por favor entre em contato com o suporte');
+        }
+        return redirect()->route('clientes.index')->with('success', 'Registro atualizado com sucesso');
     }
 
     /**
@@ -79,8 +92,14 @@ class CustomersController extends Controller
      * @param  \App\Models\Customers  $customers
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customers $customers)
+    public function destroy($id)
     {
-        //
+        $customers = Customers::find($id);
+        try {
+            $customers->delete();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Erro! Por favor entre em contato com o suporte');
+        }
+        return redirect()->route('clientes.index')->with('success', 'Registro removido com sucesso');
     }
 }

@@ -28,7 +28,6 @@
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
-                @include('layouts.navbars.sidebar')
             @endauth
 
             <div class="main-content">
@@ -43,7 +42,7 @@
 
         <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
         <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+        <script src="/js/jquery.mask.min.js"></script>
         @stack('js')
 
         <!-- Argon JS -->
@@ -51,5 +50,41 @@
 
         <script src="{{ asset('js/app.js') }}"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script type="text/javascript">
+            @if(session('success'))
+                Swal.fire(
+                    'Sucesso',
+                    '{!! session('success') !!}',
+                    'success'
+
+                )
+            @endif
+
+            @if(session('error'))
+                Swal.fire(
+                    'Erro!',
+                    '{!! session('error') !!}',
+                    'error',
+                )
+            @endif
+
+            @if(session('errors'))
+                @php
+                    $msgs = '';
+                @endphp
+                @foreach ($errors->all() as $msg)
+                    @php
+                        $msgs .= "{$msg} <br>";
+                    @endphp
+                @endforeach
+
+                Swal.fire(
+                    'Erro!',
+                    '{!! $msgs !!}',
+                    'error',
+                )
+            @endif
+        </script>
     </body>
 </html>

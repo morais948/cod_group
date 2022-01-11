@@ -1,48 +1,49 @@
 <template>
-    <form :action="route" :method="method" class="p-5">
+    <form :action="route" method="post" class="p-5">
+        <input type="hidden" name="_method" :value="method">
         <input type="hidden" name="_token" :value="csrf">
         <div class="row">
             <div class="col-12 col-lg-6">
-                <input type="text" class="form-control" placeholder="Nome">
+                <input type="text" class="form-control" placeholder="Nome (obrigatório)" name="name" id="nameId">
             </div>
             <div class="col-12 col-lg-6 mt-2 mt-lg-0">
-                <input type="text" class="form-control cpf" placeholder="CPF">
+                <input type="text" class="form-control cpf" placeholder="CPF (obrigatório)" name="cpf" id="cpf">
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-12 col-lg-6">
-                <input type="email" class="form-control" placeholder="Email">
+                <input type="email" class="form-control" placeholder="Email (obrigatório)" name="email" id="email">
             </div>
             <div class="col-12 col-lg-6 mt-2 mt-lg-0">
-                <input type="text" class="form-control phone" placeholder="Telefone (com DDD e 9)">
+                <input type="text" class="form-control phone" placeholder="Telefone (com DDD e 9. Obrigatório)" id="telephone" name="telephone">
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-12 col-lg-6">
-                <input type="text" class="form-control" id="cidade" placeholder="Cidade">
+                <input type="text" class="form-control" id="city" placeholder="Cidade (obrigatório)" name="city">
             </div>
             <div class="col-12 col-lg-6 mt-2 mt-lg-0">
-                <input type="text" class="form-control state" id="estado" placeholder="Estado" @keyup="acceptLetter($event)">
+                <input type="text" class="form-control state" id="state" placeholder="Estado (obrigatório)" @keyup="acceptLetter($event)" name="state">
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-12 col-lg-6">
-                <input type="text" class="form-control" id="rua" placeholder="Rua">
+                <input type="text" class="form-control" id="street" placeholder="Rua (obrigatório)" name="street">
             </div>
             <div class="col-12 col-lg-6 mt-2 mt-lg-0">
-                <input type="text" class="form-control number" id="bairro" placeholder="Bairro">
+                <input type="text" class="form-control" id="district" placeholder="Bairro (obrigatório)" name="district">
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-12 col-lg-6">
-                <input type="text" @keyup="requestCEP($event)" class="form-control cep" placeholder="CEP(coloque o CEP e pegaremos seu endereço automaticamente)">
+                <input type="text" @keyup="requestCEP($event)" id="cep" class="form-control cep" placeholder="CEP(coloque o CEP e pegaremos seu endereço automaticamente. Obrigatório)" name="cep">
             </div>
             <div class="col-12 col-lg-6 mt-2 mt-lg-0">
-                <input type="text" class="form-control number" placeholder="Número">
+                <input type="text" class="form-control number" id="number" placeholder="Número (obrigatório)" name="number">
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success mt-2">cadastrar</button>
+        <button type="submit" class="btn btn-success mt-2">{{ method != 'PUT' ? 'cadastrar' : 'atualizar' }}</button>
     </form>
 
 </template>
@@ -61,7 +62,8 @@ export default {
     props: [
         'route',
         'method',
-        'csrf'
+        'csrf',
+        'values'
     ],
     methods: {
         acceptLetter(event){
@@ -73,13 +75,28 @@ export default {
             if(cep.length === 8){
                 axios.get(`https://viacep.com.br/ws/${cep}/json/`)
                     .then(res => {
-                        cidade.value = res.data.localidade
-                        rua.value = res.data.logradouro
-                        estado.value = res.data.uf
-                        bairro.value = res.data.bairro
+                        city.value = res.data.localidade != undefined ? res.data.localidade : ''
+                        street.value = res.data.logradouro != undefined ? res.data.logradouro : ''
+                        state.value = res.data.uf != undefined ? res.data.uf : ''
+                        district.value = res.data.bairro != undefined ? res.data.bairro : ''
                     })
             }
         }
+    },
+    mounted(){
+        console.log(JSON.parse(this.values))
+        let values = JSON.parse(this.values)
+
+        nameId.value = values.name
+        cpf.value = values.cpf
+        email.value = values.email
+        telephone.value = values.telephone
+        city.value = values.city
+        state.value = values.state
+        street.value = values.street
+        district.value = values.district
+        cep.value = values.cep
+        number.value = values.number
     }
 }
 </script>
