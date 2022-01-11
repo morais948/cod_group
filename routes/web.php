@@ -21,8 +21,6 @@ Route::get('/', function () {
     //return view('welcome');
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
     Route::resource('clientes', CustomersController::class);

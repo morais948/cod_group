@@ -1,4 +1,4 @@
-<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="background-image: url(https://picsum.photos/1900/500); background-size: cover; background-position: center top;">
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="background-image: linear-gradient(to right, rgb(65, 175, 209), rgb(65, 116, 210)); color: white">
     <!-- Mask -->
     <span class="mask bg-gradient-default opacity-6"></span>
     <!-- Header container -->
